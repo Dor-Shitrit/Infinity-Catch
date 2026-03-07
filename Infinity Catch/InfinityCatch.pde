@@ -1,14 +1,22 @@
+//
+//  Infinity Catch
+//
+//  Created by Dor Shitrit.
+//
+
+// Image declaration
 Image background = new Image();
-Image[] object = new Image[6];
+Image[] stone = new Image[3];  // now using 3 stones for falling objects
 Image thanos = new Image();
 Image ironMan = new Image();
 Image[] lifeT = new Image[3];
-Image[] lifeI= new Image[3];
+Image[] lifeI = new Image[3];
 Image openingScreen = new Image();
 Image thanosScreen = new Image();
 Image ironScreen = new Image();
 Image loseScreen = new Image();
 
+// Music declaration
 Music theme = new Music();
 Music missSnd = new Music();
 Music catchSnd = new Music();
@@ -16,6 +24,7 @@ Music thanosWinSnd = new Music();
 Music ironWinSnd = new Music();
 Music loseSnd = new Music();
 
+// Text declaration
 Text sentenceT = new Text();
 Text sentenceI = new Text();
 Text thanosWinTxt = new Text();
@@ -23,72 +32,83 @@ Text ironWinTxt = new Text();
 Text loseTxt = new Text();
 Text openingSentence = new Text();
 
+// Global variables
 int livesT = 3;
 int livesI = 3;
 int scoreT = 0;
 int scoreI = 0;
 int isPressed = 0;
-int obIdx = int(random(0, 5));
 boolean soundPlayed = false;
+int numStones = 3; // number of stones falling concurrently
 
 void setup() {
   size(1024, 512);
 
+  // Background setup
   background.setImage("Background.png");
   background.x = 0;
   background.y = 0;
   background.width = 1024;
   background.height = 512;
 
+  // Opening screen setup
   openingScreen.setImage("Opening Screen.png");
   openingScreen.x = 0;
   openingScreen.y = 0;
   openingScreen.width = 1024;
   openingScreen.height = 512;
 
+  // Thanos win screen setup
   thanosScreen.setImage("Thanos Screen.jpg");
   thanosScreen.x = 0;
   thanosScreen.y = 0;
   thanosScreen.width = 1024;
   thanosScreen.height = 512;
 
+  // Ironman win screen setup
   ironScreen.setImage("Iron Man Screen.jpg");
   ironScreen.x = 0;
   ironScreen.y = 0;
   ironScreen.width = 1024;
   ironScreen.height = 512;
 
+  // Lose screen setup
   loseScreen.setImage("Lose Screen.png");
   loseScreen.x = 0;
   loseScreen.y = 0;
   loseScreen.width = 1024;
   loseScreen.height = 512;
 
+  // Thanos setup
   thanos.setImage("Thanos.png");
   thanos.x = 450;
   thanos.y = 370;
   thanos.width = 191;
   thanos.height = 141;
 
+  // Ironman setup
   ironMan.setImage("Iron Man.png");
   ironMan.x = 450;
   ironMan.y = 370;
   ironMan.width = 191;
   ironMan.height = 141;
 
-  for (int i = 0; i<object.length; i++) {
-    object[i] = new Image();
-    object[i].setImage("object " + (i + 1) + ".png");
-    object[i].x = int(random(0, 981));
-    object[i].y = -50;
-    object[i].width = 43;
-    object[i].height = 57;
-    object[i].direction = Direction.DOWN;
-    object[i].speed = 5;
+  // Falling stones setup - 3 stones falling concurrently with vertical gaps
+  for (int i = 0; i < numStones; i++) {
+    stone[i] = new Image();
+    // Choose a random object image from 1 to 6
+    stone[i].setImage("object " + (int(random(0, 6)) + 1) + ".png");
+    stone[i].x = int(random(0, 981));
+    stone[i].y = -50 - i * 100;  // each stone starts 100 pixels apart
+    stone[i].width = 43;
+    stone[i].height = 57;
+    stone[i].direction = Direction.DOWN;
+    stone[i].speed = 7;
   }
-
-  int x = 0;
-  for (int i = 0; i<lifeT.length; i++) {
+  
+  // Life setup
+  int x = 0; // Distance between each life
+  for (int i = 0; i < lifeT.length; i++) {
     lifeT[i] = new Image();
     lifeT[i].setImage("Thanos Life.png");
     lifeT[i].x = 170 + x;
@@ -106,6 +126,7 @@ void setup() {
     x += 35;
   }
 
+  // Theme music setup
   theme.load("Theme.mp3");
   theme.loop = true;
   theme.play();
@@ -115,37 +136,42 @@ void setup() {
   ironWinSnd.load("Iron Win.mp3");
   loseSnd.load("Lose.mp3");
 
+  // Thanos score setup
   sentenceT.text = "Score: " + scoreT;
   sentenceT.x = 10;
   sentenceT.y = 60;
   sentenceT.textSize = 30;
   sentenceT.brush = color(#9800FF);
 
+  // Ironman score setup
   sentenceI.text = "Score: " + scoreI;
   sentenceI.x = 760;
   sentenceI.y = 60;
   sentenceI.textSize = 30;
   sentenceI.brush = color(255, 0, 0);
 
+  // Start sentence setup
   openingSentence.text = "Press Any Key To Start";
   openingSentence.x = 435;
   openingSentence.y = 485;
   openingSentence.textSize = 20;
   openingSentence.brush = color(255, 255, 255);
 
-
+  // Thanos wins sentence
   thanosWinTxt.text = "PLAYER 1 WINS!";
   thanosWinTxt.x = 290;
   thanosWinTxt.y = 70;
   thanosWinTxt.textSize = 80;
   thanosWinTxt.brush = color(#9800FF);
 
+  // Ironman wins sentence
   ironWinTxt.text = "PLAYER 2 WINS!";
   ironWinTxt.x = 30;
   ironWinTxt.y = 80;
   ironWinTxt.textSize = 80;
   ironWinTxt.brush = color(255, 0, 0);
 
+  // Lose sentence
   loseTxt.text = "GAME OVER!";
   loseTxt.x = 30;
   loseTxt.y = 80;
@@ -156,105 +182,120 @@ void setup() {
 void draw() {
   openingScreen.draw();
   openingSentence.draw();
-  if (isPressed == 1) {
+  
+  if (isPressed == 1) { // Start game
     background.draw();
     thanos.draw();
-    if ((mouseX > 60) && (mouseX < 954)) {
+    if ((mouseX > 60) && (mouseX < 954)) { // Center Ironman to mouse and keep within boundaries
       ironMan.x = mouseX - 95;
     }
     ironMan.draw();
-    object[obIdx].draw();
+    
+    // Process each falling stone
+    for (int i = 0; i < numStones; i++) {
+      stone[i].draw();
+      
+      // Check for miss (stone falls below the screen)
+      if (stone[i].y > 512) {
+        resetStone(i);
+        missSnd.play();
+        livesT--;
+        livesI--;
+      }
+      
+      // Check if Thanos catches the stone
+      if (thanos.pointInShape(stone[i].x, stone[i].y)) {
+        resetStone(i);
+        catchSnd.play();
+        scoreT++;
+      }
+      
+      // Check if Ironman catches the stone
+      if (ironMan.pointInShape(stone[i].x, stone[i].y)) {
+        resetStone(i);
+        catchSnd.play();
+        scoreI++;
+      }
+    }
 
-    for (int i = 0; i<livesT; i++) {
+    // Draw lives counters
+    for (int i = 0; i < livesT; i++) {
       lifeT[i].draw();
     }
-    for (int i = 0; i<livesI; i++) {
+    for (int i = 0; i < livesI; i++) {
       lifeI[i].draw();
     }
 
-    sentenceT.draw();
+    // Update and draw scores
     sentenceT.text = "Score: " + scoreT;
-
-    sentenceI.draw();
+    sentenceT.draw();
     sentenceI.text = "Score: " + scoreI;
+    sentenceI.draw();
 
-    if (thanos.x <= 0) {
+    // Thanos boundaries check (if he reaches screen edges)
+    if (thanos.x <= 0 || thanos.x >= 820) {
       thanos.speed = 0;
     }
-    if (thanos.x >= 820) {
-      thanos.speed = 0;
-    }
-    if (object[obIdx].y > 512) {
-      obIdx = int(random(0, 5));
-      object[obIdx].y = -50;
-      object[obIdx].x = int(random(0, 981));
-      missSnd.play();
-      livesT--;
-      livesI--;
-    }
   }
-  if (thanos.pointInShape(object[obIdx].x, object[obIdx].y)) {
-    obIdx = int(random(0, 5));
-    object[obIdx].y = -50;
-    object[obIdx].x = int(random(0, 981));
-    catchSnd.play();
-    scoreT++;
-  }
-
-  if (ironMan.pointInShape(object[obIdx].x, object[obIdx].y)) {
-    obIdx = int(random(0, 5));
-    object[obIdx].y = -50;
-    object[obIdx].x = int(random(0, 981));
-    catchSnd.play();
-    scoreI++;
-  }
-
-  if (scoreT == 3) {
+  
+  // Win and lose conditions
+  if (scoreT == 10) {
     thanosScreen.draw();
     thanosWinTxt.draw();
-    object[obIdx].speed = 0;
+    for (int i = 0; i < numStones; i++) {
+      stone[i].speed = 0;
+    }
     if (!soundPlayed) {
+      theme.stop();
       thanosWinSnd.play();
       soundPlayed = true;
     }
   }
-
-  if (livesT == 0) {
-    thanos.y = -200;
-  }
-  if (scoreI == 3) {
+  
+  if (scoreI == 10) {
     ironScreen.draw();
     ironWinTxt.draw();
-    object[obIdx].speed = 0;
+    for (int i = 0; i < numStones; i++) {
+      stone[i].speed = 0;
+    }
     if (!soundPlayed) {
+      theme.stop();
       ironWinSnd.play();
       soundPlayed = true;
     }
   }
-
-  if (livesI == 0) {
+  
+  if (livesT <= 0) {
+    thanos.y = -200;
+  }
+  
+  if (livesI <= 0) {
     ironMan.y = -200;
   }
-
-  if ((livesT == 0) && (livesI == 0)) {
+  
+  if ((livesT <= 0) && (livesI <= 0)) {
     loseScreen.draw();
     loseTxt.draw();
-    object[obIdx].speed = 0;
+    for (int i = 0; i < numStones; i++) {
+      stone[i].speed = 0;
+    }
     if (!soundPlayed) {
+      theme.stop();
       loseSnd.play();
       soundPlayed = true;
     }
   }
 }
 
+// Thanos movement
 void keyPressed() {
   isPressed = 1;
   if (keyCode == RIGHT) {
-    thanos.speed = 10;
+    thanos.speed = 15;
     thanos.direction = Direction.RIGHT;
   }
   if (keyCode == LEFT) {
-    thanos.speed = 10;
+    thanos.speed = 15;
     thanos.direction = Direction.LEFT;
   }
   if (keyCode == UP) {
@@ -262,6 +303,27 @@ void keyPressed() {
   }
 }
 
+// Start game on mouse press
 void mousePressed() {
   isPressed = 1;
+}
+
+// Reset stone with index idx, placing it above the highest falling stone to maintain a gap
+void resetStone(int idx) {
+  stone[idx].setImage("object " + (int(random(0, 6)) + 1) + ".png");
+  stone[idx].x = int(random(0, 981));
+
+  int minY = 512; // start with a value at the bottom of the screen
+  for (int j = 0; j < numStones; j++) {
+    if (j != idx && stone[j].y < minY) {
+      minY = stone[j].y;
+    }
+  }
+  
+  // Ensure the stone reappears off-screen at y = -50 or above, with a gap of 100 if possible
+  if (minY < -50) {
+    stone[idx].y = minY - 100;
+  } else {
+    stone[idx].y = -50;
+  }
 }
