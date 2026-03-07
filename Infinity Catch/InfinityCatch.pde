@@ -1,26 +1,35 @@
 Image background = new Image();
 Image[] object = new Image[6];
-Image catcher = new Image();
-Image life1 = new Image();
-Image life2 = new Image();
-Image life3 = new Image();
+Image thanos = new Image();
+Image ironMan = new Image();
+Image[] lifeT = new Image[3];
+Image[] lifeI= new Image[3];
 Image openingScreen = new Image();
-Image winScreen = new Image();
+Image thanosScreen = new Image();
+Image ironScreen = new Image();
 Image loseScreen = new Image();
 
 Music theme = new Music();
-Music missSound = new Music();
-Music catchSound = new Music();
+Music missSnd = new Music();
+Music catchSnd = new Music();
+Music thanosWinSnd = new Music();
+Music ironWinSnd = new Music();
+Music loseSnd = new Music();
 
-Text sentence = new Text();
-Text win = new Text();
-Text lose = new Text();
+Text sentenceT = new Text();
+Text sentenceI = new Text();
+Text thanosWinTxt = new Text();
+Text ironWinTxt = new Text();
+Text loseTxt = new Text();
 Text openingSentence = new Text();
 
-int lives = 3;
-int score = 0;
+int livesT = 3;
+int livesI = 3;
+int scoreT = 0;
+int scoreI = 0;
 int isPressed = 0;
-int obIdx = 0;
+int obIdx = int(random(0, 5));
+boolean soundPlayed = false;
 
 void setup() {
   size(1024, 512);
@@ -37,23 +46,35 @@ void setup() {
   openingScreen.width = 1024;
   openingScreen.height = 512;
 
-  winScreen.setImage("Win Screen.jpg");
-  winScreen.x = 0;
-  winScreen.y = 0;
-  winScreen.width = 1024;
-  winScreen.height = 512;
+  thanosScreen.setImage("Thanos Screen.jpg");
+  thanosScreen.x = 0;
+  thanosScreen.y = 0;
+  thanosScreen.width = 1024;
+  thanosScreen.height = 512;
 
-  loseScreen.setImage("Lose Screen.jpg");
+  ironScreen.setImage("Iron Man Screen.jpg");
+  ironScreen.x = 0;
+  ironScreen.y = 0;
+  ironScreen.width = 1024;
+  ironScreen.height = 512;
+
+  loseScreen.setImage("Lose Screen.png");
   loseScreen.x = 0;
   loseScreen.y = 0;
   loseScreen.width = 1024;
   loseScreen.height = 512;
 
-  catcher.setImage("Catcher.png");
-  catcher.x = 450;
-  catcher.y = 370;
-  catcher.width = 191;
-  catcher.height = 141;
+  thanos.setImage("Thanos.png");
+  thanos.x = 450;
+  thanos.y = 370;
+  thanos.width = 191;
+  thanos.height = 141;
+
+  ironMan.setImage("Iron Man.png");
+  ironMan.x = 450;
+  ironMan.y = 370;
+  ironMan.width = 191;
+  ironMan.height = 141;
 
   for (int i = 0; i<object.length; i++) {
     object[i] = new Image();
@@ -65,91 +86,46 @@ void setup() {
     object[i].direction = Direction.DOWN;
     object[i].speed = 5;
   }
-  /*
-   object[0].setImage("object 1.png");
-   //object[0].x = 512;
-   object[0].x = int(random(0,981));
-   object[0].y = -50;
-   object[0].width = 43;
-   object[0].height = 57;
-   object[0].direction = Direction.DOWN;
-   object[0].speed = 5;
-   
-   object[1].setImage("object 2.png");
-   //object[0].x = 512;
-   object[1].x = int(random(0,981));
-   object[1].y = -50;
-   object[1].width = 43;
-   object[1].height = 57;
-   object[1].direction = Direction.DOWN;
-   object[1].speed = 5;
-   
-   object[2].setImage("object 3.png");
-   //object[0].x = 512;
-   object[2].x = int(random(0,981));
-   object[2].y = -50;
-   object[2].width = 43;
-   object[2].height = 57;
-   object[2].direction = Direction.DOWN;
-   object[2].speed = 5;
-   
-   object[3].setImage("object 4.png");
-   //object[0].x = 512;
-   object[3].x = int(random(0,981));
-   object[3].y = -50;
-   object[3].width = 43;
-   object[3].height = 57;
-   object[3].direction = Direction.DOWN;
-   object[3].speed = 5;
-   
-   object[4].setImage("object 5.png");
-   //object[0].x = 512;
-   object[4].x = int(random(0,981));
-   object[4].y = -50;
-   object[4].width = 43;
-   object[4].height = 57;
-   object[4].direction = Direction.DOWN;
-   object[4].speed = 5;
-   
-   object[5].setImage("object 6.png");
-   //object[0].x = 512;
-   object[5].x = int(random(0,981));
-   object[5].y = -50;
-   object[5].width = 43;
-   object[5].height = 57;
-   object[5].direction = Direction.DOWN;
-   object[5].speed = 5;
-   */
 
-  life1.setImage("Lives.png");
-  life1.x = 170;
-  life1.y = 20;
-  life1.width = 30;
-  life1.height = 57;
+  int x = 0;
+  for (int i = 0; i<lifeT.length; i++) {
+    lifeT[i] = new Image();
+    lifeT[i].setImage("Thanos Life.png");
+    lifeT[i].x = 170 + x;
+    lifeT[i].y = 20;
+    lifeT[i].width = 30;
+    lifeT[i].height = 57;
 
-  life2.setImage("Lives.png");
-  life2.x = 200;
-  life2.y = 20;
-  life2.width = 30;
-  life2.height = 57;
+    lifeI[i] = new Image();
+    lifeI[i].setImage("Iron Life.png");
+    lifeI[i].x = 900 + x;
+    lifeI[i].y = 20;
+    lifeI[i].width = 50;
+    lifeI[i].height = 57;
 
-  life3.setImage("Lives.png");
-  life3.x = 230;
-  life3.y = 20;
-  life3.width = 30;
-  life3.height = 57;
+    x += 35;
+  }
 
   theme.load("Theme.mp3");
   theme.loop = true;
   theme.play();
-  missSound.load("Miss Sound.mp3");
-  catchSound.load("Catch Sound.mp3");
+  missSnd.load("Miss Sound.mp3");
+  catchSnd.load("Catch Sound.mp3");
+  thanosWinSnd.load("Thanos Win.mp3");
+  ironWinSnd.load("Iron Win.mp3");
+  loseSnd.load("Lose.mp3");
 
-  sentence.text = "Score: " + score;
-  sentence.x = 10;
-  sentence.y = 60;
-  sentence.textSize = 30;
-  sentence.brush = color(255, 0, 0);
+  sentenceT.text = "Score: " + scoreT;
+  sentenceT.x = 10;
+  sentenceT.y = 60;
+  sentenceT.textSize = 30;
+  sentenceT.brush = color(#9800FF);
+
+  sentenceI.text = "Score: " + scoreI;
+  sentenceI.x = 760;
+  sentenceI.y = 60;
+  sentenceI.textSize = 30;
+  sentenceI.brush = color(255, 0, 0);
 
   openingSentence.text = "Press Any Key To Start";
   openingSentence.x = 435;
@@ -158,17 +134,23 @@ void setup() {
   openingSentence.brush = color(255, 255, 255);
 
 
-  win.text = "YOU WIN!";
-  win.x = 300;
-  win.y = 120;
-  win.textSize = 80;
-  win.brush = color(255, 0, 0);
+  thanosWinTxt.text = "PLAYER 1 WINS!";
+  thanosWinTxt.x = 290;
+  thanosWinTxt.y = 70;
+  thanosWinTxt.textSize = 80;
+  thanosWinTxt.brush = color(#9800FF);
 
-  lose.text = "GAME OVER!";
-  lose.x = 50;
-  lose.y = 80;
-  lose.textSize = 80;
-  lose.brush = color(255, 0, 0);
+  ironWinTxt.text = "PLAYER 2 WINS!";
+  ironWinTxt.x = 30;
+  ironWinTxt.y = 80;
+  ironWinTxt.textSize = 80;
+  ironWinTxt.brush = color(255, 0, 0);
+
+  loseTxt.text = "GAME OVER!";
+  loseTxt.x = 30;
+  loseTxt.y = 80;
+  loseTxt.textSize = 80;
+  loseTxt.brush = color(255, 0, 0);
 }
 
 void draw() {
@@ -176,68 +158,110 @@ void draw() {
   openingSentence.draw();
   if (isPressed == 1) {
     background.draw();
-    catcher.draw();
+    thanos.draw();
+    if ((mouseX > 60) && (mouseX < 954)) {
+      ironMan.x = mouseX - 95;
+    }
+    ironMan.draw();
     object[obIdx].draw();
-    if (lives == 3) {
-      life1.draw();
-      life2.draw();
-      life3.draw();
-    } else if (lives == 2) {
-      life1.draw();
-      life2.draw();
-    } else if (lives == 1) {
-      life1.draw();
-    }
-    sentence.draw();
 
-    sentence.text = "Score: " + score;
-
-    if (catcher.x <= 0) {
-      catcher.speed = 0;
+    for (int i = 0; i<livesT; i++) {
+      lifeT[i].draw();
     }
-    if (catcher.x >= 820) {
-      catcher.speed = 0;
+    for (int i = 0; i<livesI; i++) {
+      lifeI[i].draw();
+    }
+
+    sentenceT.draw();
+    sentenceT.text = "Score: " + scoreT;
+
+    sentenceI.draw();
+    sentenceI.text = "Score: " + scoreI;
+
+    if (thanos.x <= 0) {
+      thanos.speed = 0;
+    }
+    if (thanos.x >= 820) {
+      thanos.speed = 0;
     }
     if (object[obIdx].y > 512) {
       obIdx = int(random(0, 5));
       object[obIdx].y = -50;
       object[obIdx].x = int(random(0, 981));
-      missSound.play();
-      lives--;
+      missSnd.play();
+      livesT--;
+      livesI--;
     }
   }
-  if (catcher.pointInShape(object[obIdx].x, object[obIdx].y)) {
+  if (thanos.pointInShape(object[obIdx].x, object[obIdx].y)) {
     obIdx = int(random(0, 5));
     object[obIdx].y = -50;
     object[obIdx].x = int(random(0, 981));
-    catchSound.play();
-    score++;
+    catchSnd.play();
+    scoreT++;
   }
 
-  if (score == 10) {
-    winScreen.draw();
-    win.draw();
+  if (ironMan.pointInShape(object[obIdx].x, object[obIdx].y)) {
+    obIdx = int(random(0, 5));
+    object[obIdx].y = -50;
+    object[obIdx].x = int(random(0, 981));
+    catchSnd.play();
+    scoreI++;
+  }
+
+  if (scoreT == 3) {
+    thanosScreen.draw();
+    thanosWinTxt.draw();
     object[obIdx].speed = 0;
+    if (!soundPlayed) {
+      thanosWinSnd.play();
+      soundPlayed = true;
+    }
   }
 
-  if (lives == 0) {
+  if (livesT == 0) {
+    thanos.y = -200;
+  }
+  if (scoreI == 3) {
+    ironScreen.draw();
+    ironWinTxt.draw();
+    object[obIdx].speed = 0;
+    if (!soundPlayed) {
+      ironWinSnd.play();
+      soundPlayed = true;
+    }
+  }
+
+  if (livesI == 0) {
+    ironMan.y = -200;
+  }
+
+  if ((livesT == 0) && (livesI == 0)) {
     loseScreen.draw();
-    lose.draw();
+    loseTxt.draw();
     object[obIdx].speed = 0;
+    if (!soundPlayed) {
+      loseSnd.play();
+      soundPlayed = true;
+    }
   }
 }
 
 void keyPressed() {
   isPressed = 1;
   if (keyCode == RIGHT) {
-    catcher.speed = 10;
-    catcher.direction = Direction.RIGHT;
+    thanos.speed = 10;
+    thanos.direction = Direction.RIGHT;
   }
   if (keyCode == LEFT) {
-    catcher.speed = 10;
-    catcher.direction = Direction.LEFT;
+    thanos.speed = 10;
+    thanos.direction = Direction.LEFT;
   }
   if (keyCode == UP) {
-    catcher.speed = 0;
+    thanos.speed = 0;
   }
+}
+
+void mousePressed() {
+  isPressed = 1;
 }
