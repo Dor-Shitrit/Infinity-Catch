@@ -1,4 +1,4 @@
-# Infinity Catch
+# 🪐 Infinity Catch
 
 <p align="center">
   A fast-paced <b>2-player arcade game</b> inspired by the Marvel universe, where <b>Thanos</b> and <b>Iron Man</b> compete to catch falling stones and reach victory first.
@@ -6,13 +6,13 @@
 
 ---
 
-## Game Preview
+## 🎮 Game Preview
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/d8b770d5-c3ee-4abc-8f8e-a4399019f023" width="700"/>
 </p>
 
-## About the Game
+## 🕹 About the Game
 
 **Infinity Catch** is a local multiplayer arcade game built in **Processing**.
 
@@ -23,7 +23,7 @@ Two players compete on the same screen:
 
 Falling objects appear from the top of the screen, and both players race to catch them before they hit the ground.
 
-### Objective
+### 🎯 Objective
 
 - Catch stones to gain points
 - Avoid missing stones, because both players lose a life when a stone reaches the bottom
@@ -31,7 +31,7 @@ Falling objects appear from the top of the screen, and both players race to catc
 
 ---
 
-## Gameplay Rules
+## 📜 Gameplay Rules
 
 - Each player starts with **3 lives**
 - **3 falling objects** are active at the same time
@@ -43,7 +43,7 @@ Falling objects appear from the top of the screen, and both players race to catc
 
 ---
 
-## Controls
+## 🎹 Controls
 
 ### Player 1, Thanos
 | Key | Action |
@@ -63,7 +63,7 @@ Falling objects appear from the top of the screen, and both players race to catc
 
 ---
 
-## Features
+## ✨ Features
 
 - 2-player local gameplay
 - Marvel-themed characters and art
@@ -77,7 +77,7 @@ Falling objects appear from the top of the screen, and both players race to catc
 
 ---
 
-## Built With
+## 🛠 Built With
 
 - **Processing**
 - **Java-based game logic**
@@ -86,7 +86,7 @@ Falling objects appear from the top of the screen, and both players race to catc
 
 ---
 
-## How to Run
+## 🚀 How to Run
 
 1. Install **Processing**
 2. Clone this repository:
@@ -98,6 +98,6 @@ Falling objects appear from the top of the screen, and both players race to catc
 5. Click **Run**
 
 ---
-## Author
+## 👨🏽‍💻 Author
 
 Created by **Dor Shitrit**
