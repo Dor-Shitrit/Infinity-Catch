@@ -9,7 +9,7 @@
 ## 🎮 Game Preview
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/d8b770d5-c3ee-4abc-8f8e-a4399019f023" width="700"/>
+<img src="Assets/Infinity_Catch.gif" width="700">
 </p>
 
 ## 🕹 About the Game
